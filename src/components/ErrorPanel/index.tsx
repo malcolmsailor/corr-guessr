@@ -9,6 +9,8 @@ import {
   Grow,
   Radio,
   RadioGroup,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { ErrorPlot } from "./ErrorPlot";
 import { useContext, useState } from "react";
@@ -19,6 +21,8 @@ import { GuessrContext } from "../../shared/context";
 export const ErrorPanel = () => {
   const [open, setOpen] = useState(false);
   const { errorPlotType, setErrorPlotType } = useContext(GuessrContext);
+  const theme = useTheme();
+  const isXsScreen = useMediaQuery(theme.breakpoints.only("xs"));
   return (
     <>
       <Divider />
@@ -55,7 +59,8 @@ export const ErrorPanel = () => {
                     control={<Radio />}
                     label={
                       thisErrorPlotType.charAt(0).toUpperCase() +
-                      thisErrorPlotType.slice(1)
+                      thisErrorPlotType.slice(1) +
+                      (isXsScreen ? "" : " error")
                     }
                     onChange={(_event, checked) =>
                       setErrorPlotType(

@@ -23,7 +23,7 @@ export const GuessInput = ({
         setError(true);
         return;
       }
-      if (numberValue < -1 || numberValue > 1) {
+      if (numberValue < 0 || numberValue > 1) {
         setError(true);
         return;
       }
@@ -44,7 +44,7 @@ export const GuessInput = ({
       onChange={(event) => setValue(event.target.value)}
       variant="outlined"
       error={error}
-      helperText={error ? "Enter a number between -1 and 1" : ""}
+      helperText={error ? "Enter a number between 0 and 1" : ""}
     />
   );
 };
