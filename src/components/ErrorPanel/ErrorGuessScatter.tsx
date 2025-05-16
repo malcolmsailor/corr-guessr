@@ -20,29 +20,30 @@ export const ErrorGuessScatter = () => {
     maxError = Math.max(maxError, Math.abs(minError));
     minError = 0;
   }
-  const errorData = errors.map((error, index) => ({
-    x: index + 1,
-    y: errorPlotType === "absolute" ? Math.abs(error) : error,
-    z: 1,
-  }));
 
   const allData: Record<string, { x: number; y: number; z: number }[]> = {};
   for (let i = 0; i < errors.length; i++) {
     const feature = featureHistory[i];
+    const thisPoint = {
+      x: i + 1,
+      y: errorPlotType === "absolute" ? Math.abs(errors[i]) : errors[i],
+      z: 1,
+    };
     if (allData[feature]) {
-      allData[feature].push({
-        x: i + 1,
-        y: errorPlotType === "absolute" ? Math.abs(errors[i]) : errors[i],
-        z: 1,
-      });
+      allData[feature].push(thisPoint);
     } else {
-      allData[feature] = [{ x: i + 1, y: errors[i], z: 1 }];
+      allData[feature] = [thisPoint];
     }
   }
 
   let line: React.ReactNode | null = null;
 
   if (errors.length > 0) {
+    const errorData = errors.map((error, index) => ({
+      x: index + 1,
+      y: errorPlotType === "absolute" ? Math.abs(error) : error,
+      z: 1,
+    }));
     const regression = runRegression(
       errorData.map((error) => [error.x, error.y])
     );

@@ -14,20 +14,15 @@ export const ErrorCorrelationScatter = () => {
   const allData: Record<string, { x: number; y: number; z: number }[]> = {};
   for (let i = 0; i < corrs.length; i++) {
     const feature = featureHistory[i];
+    const thisPoint = {
+      x: errorPlotType === "absolute" ? Math.abs(errors[i]) : errors[i],
+      y: corrs[i],
+      z: 1,
+    };
     if (allData[feature]) {
-      allData[feature].push({
-        x: errorPlotType === "absolute" ? Math.abs(errors[i]) : errors[i],
-        y: corrs[i],
-        z: 1,
-      });
+      allData[feature].push(thisPoint);
     } else {
-      allData[feature] = [
-        {
-          x: errorPlotType === "absolute" ? Math.abs(errors[i]) : errors[i],
-          y: corrs[i],
-          z: 1,
-        },
-      ];
+      allData[feature] = [thisPoint];
     }
   }
 
