@@ -59,6 +59,7 @@ export const getXAxis = (
         fontSize: isXs ? "0.75rem" : "1.0rem",
         dy: showTickLabels ? 10 : 0,
       }}
+      allowDataOverflow={true}
     />
   );
 };
@@ -85,6 +86,7 @@ export const getYAxis = (
         dx: isXs ? 2 : 0,
         angle: -90,
       }}
+      allowDataOverflow={true}
     />
   );
 };
