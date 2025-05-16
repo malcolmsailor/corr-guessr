@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { FEATURE_MAPPING } from "../../shared/defaults";
 import { getAlpha, getColor } from "../../shared/colors";
-import { alpha } from "@mui/material";
+import { alpha, useMediaQuery, useTheme } from "@mui/material";
 
 type ScatterPlotProps = {
   delayMS?: number;
@@ -20,6 +20,8 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
   // We need to delay the data to avoid the user catching a glimpse of the new scatter
   // plot before it is hidden.
   const { data, appState } = useContext(GuessrContext);
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [delayData, setDelayData] = useState(data);
 
@@ -103,7 +105,12 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
           type="number"
           dataKey="x"
           tick={false}
-          label={{ value: xLabel, position: "insideBottom" }}
+          label={{
+            value: xLabel,
+            position: "insideBottom",
+            fontSize: isXs ? "0.75rem" : "1.0rem",
+            dy: isXs ? -10 : -5,
+          }}
           domain={[xMin, xMax]}
           width={25}
         />
@@ -111,7 +118,11 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
           type="number"
           dataKey="y"
           tick={false}
-          label={{ value: yLabel, angle: -90 }}
+          label={{
+            value: yLabel,
+            angle: -90,
+            fontSize: isXs ? "0.75rem" : "1.0rem",
+          }}
           domain={[yMin, yMax]}
           width={25}
         />

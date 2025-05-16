@@ -1,25 +1,16 @@
 import { useContext } from "react";
 import { GuessrContext } from "../../shared/context";
-import { Scatter, YAxis, XAxis, Cell, CartesianGrid } from "recharts";
+import { Scatter, Cell, CartesianGrid } from "recharts";
 import { ScatterChart } from "recharts";
 import { ResponsiveContainer } from "recharts";
-import { Legend } from "recharts";
-import { useMediaQuery, useTheme } from "@mui/material";
-import { getFeatureLabels } from "./common";
+import { useTheme } from "@mui/material";
+import { getFeatureLabels, getLegend, getXAxis, getYAxis } from "./common";
 
 export const ErrorCorrelationScatter = () => {
   const theme = useTheme();
   const { errors, corrs, errorPlotType, featureHistory } =
     useContext(GuessrContext);
 
-  const isXsScreen = useMediaQuery(theme.breakpoints.only("xs"));
-  const legendStyle: React.CSSProperties = {
-    paddingLeft: "16px",
-  };
-  if (isXsScreen) {
-    legendStyle.paddingLeft = "8px";
-    legendStyle.maxWidth = "150px";
-  }
   const allData: Record<string, { x: number; y: number; z: number }[]> = {};
   for (let i = 0; i < corrs.length; i++) {
     const feature = featureHistory[i];
@@ -47,27 +38,24 @@ export const ErrorCorrelationScatter = () => {
   const yMin = 0;
   const yMax = 1;
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <ScatterChart>
+    <ResponsiveContainer
+      width="100%"
+      height="100%"
+      style={{
+        paddingLeft: "0px",
+        marginLeft: "0px",
+      }}
+    >
+      <ScatterChart
+        style={{
+          paddingLeft: "0px",
+          marginLeft: "0px",
+        }}
+        margin={{ left: -20, top: 10, right: -10, bottom: 0 }}
+      >
         <CartesianGrid strokeDasharray="6 12" />
-        <XAxis
-          type="number"
-          dataKey="x"
-          domain={[xMin, xMax]}
-          tickCount={5}
-          interval={0}
-          tickFormatter={(_value) => ""}
-          label="Error"
-        />
-        <YAxis
-          type="number"
-          dataKey="y"
-          domain={[yMin, yMax]}
-          tickCount={5}
-          interval={0}
-          tickFormatter={(_value) => ""}
-          label={{ value: "Correlation", angle: -90 }}
-        />
+        {getXAxis(theme, "Error", xMin, xMax)}
+        {getYAxis(theme, "Correlation", yMin, yMax)}
         {Object.keys(allData).map((feature, featureIndex) => (
           <Scatter
             data={allData[feature]}
@@ -79,12 +67,7 @@ export const ErrorCorrelationScatter = () => {
             ))}
           </Scatter>
         ))}
-        <Legend
-          align="right"
-          verticalAlign="middle"
-          layout="vertical"
-          wrapperStyle={legendStyle}
-        />
+        {getLegend(theme)}
       </ScatterChart>
     </ResponsiveContainer>
   );

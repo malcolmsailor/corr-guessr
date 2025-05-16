@@ -1,20 +1,13 @@
-import {
-  ResponsiveContainer,
-  YAxis,
-  XAxis,
-  ReferenceLine,
-  Legend,
-} from "recharts";
+import { ResponsiveContainer, ReferenceLine } from "recharts";
 import { Scatter, Cell, CartesianGrid } from "recharts";
 import { ScatterChart } from "recharts";
 import { GuessrContext } from "../../shared/context";
 import { useContext } from "react";
 
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { runRegression } from "../../utils/math";
 
-import { formatNumber } from "../../utils/math";
-import { getFeatureLabels } from "./common";
+import { getFeatureLabels, getLegend, getXAxis, getYAxis } from "./common";
 
 export const ErrorGuessScatter = () => {
   const theme = useTheme();
@@ -33,14 +26,6 @@ export const ErrorGuessScatter = () => {
     z: 1,
   }));
 
-  const isXsScreen = useMediaQuery(theme.breakpoints.only("xs"));
-  const legendStyle: React.CSSProperties = {
-    paddingLeft: "16px",
-  };
-  if (isXsScreen) {
-    legendStyle.paddingLeft = "8px";
-    legendStyle.maxWidth = "150px";
-  }
   const allData: Record<string, { x: number; y: number; z: number }[]> = {};
   for (let i = 0; i < errors.length; i++) {
     const feature = featureHistory[i];
@@ -102,40 +87,10 @@ export const ErrorGuessScatter = () => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <ScatterChart>
+      <ScatterChart margin={{ left: -20, top: 10, right: -10, bottom: 0 }}>
         <CartesianGrid vertical={false} strokeDasharray="6 12" />
-        <XAxis
-          type="number"
-          dataKey="x"
-          domain={[minX, maxX]}
-          tickFormatter={(_value) => ""}
-          label="Guess"
-        />
-        <YAxis
-          width={50}
-          type="number"
-          dataKey="y"
-          domain={[minError, maxError]}
-          label={{ value: "Error", angle: -90, dx: -20 }}
-          tickCount={5}
-          tickFormatter={(value) =>
-            value % 0.5 == 0 ? formatNumber(value) : ""
-          }
-        />
-        {/* <Scatter data={errorData}>
-          {errorData.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={getColor(
-                0,
-                0.25,
-                theme.palette.primary.main,
-                theme.palette.error.main,
-                Math.abs(entry.y)
-              )}
-            />
-          ))}
-        </Scatter> */}
+        {getXAxis(theme, "Guess", minX, maxX, false)}
+        {getYAxis(theme, "Error", minError, maxError)}
         {Object.keys(allData).map((feature, featureIndex) => (
           <Scatter
             data={allData[feature]}
@@ -148,12 +103,7 @@ export const ErrorGuessScatter = () => {
           </Scatter>
         ))}
         {line}
-        <Legend
-          align="right"
-          verticalAlign="middle"
-          layout="vertical"
-          wrapperStyle={legendStyle}
-        />
+        {getLegend(theme)}
       </ScatterChart>
     </ResponsiveContainer>
   );

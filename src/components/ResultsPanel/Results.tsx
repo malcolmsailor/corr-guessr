@@ -14,28 +14,28 @@ export const Results = () => {
   return (
     <Box sx={{ textAlign: "center" }}>
       <Grid container spacing={0} justifyContent="center">
-        <Grid size={6} sx={{ textAlign: "right" }}>
+        <Grid size={7} sx={{ textAlign: "right" }}>
           <Typography variant="h6">
             True <span style={{ fontStyle: "italic" }}>r</span>.
           </Typography>
         </Grid>
-        <Grid size={6} sx={{ textAlign: "left", pl: 1 }}>
+        <Grid size={5} sx={{ textAlign: "left", pl: 1 }}>
           <Typography variant="h6">= {formatR(data.r)}</Typography>
         </Grid>
 
-        <Grid size={6} sx={{ textAlign: "right" }}>
+        <Grid size={7} sx={{ textAlign: "right" }}>
           <Typography variant="h6">
             Guessed <span style={{ fontStyle: "italic" }}>r</span>.
           </Typography>
         </Grid>
-        <Grid size={6} sx={{ textAlign: "left", pl: 1 }}>
+        <Grid size={5} sx={{ textAlign: "left", pl: 1 }}>
           <Typography variant="h6">= {formatR(appState.guess)}</Typography>
         </Grid>
 
-        <Grid size={6} sx={{ textAlign: "right" }}>
+        <Grid size={7} sx={{ textAlign: "right" }}>
           <Typography variant="h6">Error</Typography>
         </Grid>
-        <Grid size={6} sx={{ textAlign: "left", pl: 1 }}>
+        <Grid size={5} sx={{ textAlign: "left", pl: 1 }}>
           <Typography variant="h6">= {formatR(error)}</Typography>
         </Grid>
       </Grid>

@@ -5,6 +5,7 @@ import {
   Link,
   Typography,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
 import { Grid } from "@mui/material";
@@ -17,6 +18,8 @@ import githubMark from "../assets/github-mark.svg";
 export const Header = () => {
   const { settingsOpen, setSettingsOpen } = useContext(GuessrContext);
   const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+
   return (
     <>
       <Grid container>
@@ -35,7 +38,10 @@ export const Header = () => {
               sx={{ padding: 0.5 }}
             >
               <Settings
-                sx={{ fontSize: 30, color: theme.palette.text.primary }}
+                sx={{
+                  fontSize: isXs ? 20 : 30,
+                  color: theme.palette.text.primary,
+                }}
               />
             </IconButton>
           </Tooltip>
@@ -57,7 +63,7 @@ export const Header = () => {
               <img
                 src={githubMark}
                 alt="GitHub"
-                style={{ width: "32px", height: "32px" }}
+                style={{ width: isXs ? 20 : 32, height: isXs ? 20 : 32 }}
               />
             </Tooltip>
           </Link>

@@ -63,7 +63,7 @@ export const CorrGuessr = () => {
 
   return (
     <Container maxWidth="md" ref={containerRef} sx={{ position: "relative" }}>
-      <Card>
+      <Card sx={{ marginBottom: 5 }}>
         <CardContent sx={{ marginBottom: -2, marginTop: -1 }}>
           <Grid container>
             <Grid size={12}>

@@ -1,4 +1,14 @@
-import { Box, Button, Collapse, Divider, Grid, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  Grid,
+  Tab,
+  Tabs,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { ErrorGuessScatter } from "./ErrorGuessScatter";
 import { useContext, useState } from "react";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
@@ -30,6 +40,7 @@ function a11yProps(index: number) {
 }
 
 export const ErrorPanel = () => {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
   const { featureHistory } = useContext(GuessrContext);
@@ -38,6 +49,7 @@ export const ErrorPanel = () => {
   // We need to expand the plot box height to account for the legend when
   // there are lots of features.
   const plotBoxHeight = Math.max(180, numUniqueFeatures * 24);
+  const isXsScreen = useMediaQuery(theme.breakpoints.only("xs"));
   return (
     <>
       <Divider />
@@ -54,8 +66,14 @@ export const ErrorPanel = () => {
                 variant="fullWidth"
                 centered
               >
-                <Tab label="Guess number vs. error" {...a11yProps(0)} />
-                <Tab label="Correlation vs. error" {...a11yProps(1)} />
+                <Tab
+                  label={isXsScreen ? "Guess" : "Guess number vs. error"}
+                  {...a11yProps(0)}
+                />
+                <Tab
+                  label={isXsScreen ? "Corr." : "Correlation vs. error"}
+                  {...a11yProps(1)}
+                />
               </Tabs>
             </Box>
           ) : null}

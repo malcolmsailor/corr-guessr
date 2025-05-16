@@ -22,8 +22,92 @@ declare module "@mui/material/styles" {
   }
 }
 
+// Create a breakpoints-only theme
+const breakpointsTheme = createTheme();
+const { breakpoints } = breakpointsTheme;
+
 export const theme = responsiveFontSizes(
   createTheme({
+    components: {
+      MuiTypography: {
+        styleOverrides: {
+          body1: {
+            [breakpoints.down("md")]: {
+              fontSize: "0.9rem",
+            },
+            [breakpoints.down("sm")]: {
+              fontSize: "0.8rem",
+            },
+          },
+          h3: {
+            [breakpoints.down("md")]: {
+              fontSize: "1.75rem",
+            },
+            [breakpoints.down("sm")]: {
+              fontSize: "1.5rem",
+            },
+          },
+          h4: {
+            [breakpoints.down("md")]: {
+              fontSize: "1.5rem",
+            },
+            [breakpoints.down("sm")]: {
+              fontSize: "1.25rem",
+            },
+          },
+          h6: {
+            [breakpoints.down("md")]: {
+              fontSize: "1.0rem",
+            },
+            [breakpoints.down("sm")]: {
+              fontSize: "0.8rem",
+            },
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            fontSize: "0.875rem",
+            [breakpoints.down("sm")]: {
+              fontSize: "0.65rem",
+            },
+          },
+        },
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            fontSize: "0.875rem",
+            [breakpoints.down("md")]: {
+              fontSize: "0.8rem",
+            },
+            [breakpoints.down("sm")]: {
+              fontSize: "0.65rem",
+            },
+          },
+        },
+      },
+      MuiFormControlLabel: {
+        styleOverrides: {
+          label: {
+            fontSize: "0.875rem",
+            [breakpoints.down("sm")]: {
+              fontSize: "0.75rem",
+            },
+          },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            [breakpoints.down("sm")]: {
+              fontSize: "0.75rem",
+            },
+          },
+        },
+      },
+    },
     palette: { mode: "light" },
     colorPairs: [],
     chartColors: [
