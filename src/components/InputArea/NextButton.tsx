@@ -1,8 +1,9 @@
 import { GuessrContext } from "../../shared/context";
 import { useContext, useEffect } from "react";
 import { Button, useTheme } from "@mui/material";
-import { getData } from "../../game-logic";
+import { updateData } from "../../game-logic";
 import { getCorrelation } from "../../utils/math";
+import { features } from "../../shared/types";
 
 export const NextButton = ({
   guessInputRef: guessInputRef,
@@ -11,19 +12,32 @@ export const NextButton = ({
   guessInputRef: React.RefObject<HTMLInputElement | null>;
   nextButtonRef: React.RefObject<HTMLButtonElement | null>;
 }) => {
-  const { appState, settings, data, setData, setAppState } =
-    useContext(GuessrContext);
+  const {
+    appState,
+    settings,
+    data,
+    setData,
+    setAppState,
+    errors,
+    setErrors,
+    corrs,
+    setCorrs,
+    featureHistory,
+    setFeatureHistory,
+    randomizeFeatures,
+  } = useContext(GuessrContext);
 
   const theme = useTheme();
-  const updateData = (): void => {
-    setData(getData(settings, appState.targetR, theme.colorPairs));
-  };
   const error = data.r - appState.guess;
   useEffect(() => {
-    setAppState({
-      ...appState,
-      errors: [...appState.errors, error],
-    });
+    setErrors([...errors, error]);
+    setCorrs([...corrs, data.r]);
+    const featureIndices = [
+      features.indexOf(appState.feature1),
+      features.indexOf(appState.feature2),
+    ];
+    featureIndices.sort((a, b) => a - b);
+    setFeatureHistory([...featureHistory, featureIndices.join("_")]);
   }, [error]);
 
   return (
@@ -33,12 +47,18 @@ export const NextButton = ({
       color="primary"
       onClick={() => {
         const newTargetR = getCorrelation();
-        setAppState({
-          ...appState,
-          guessActive: true,
-          targetR: newTargetR,
-        });
-        updateData();
+        updateData(
+          settings,
+          appState,
+          setAppState,
+          setData,
+          theme,
+          randomizeFeatures,
+          {
+            guessActive: true,
+            targetR: newTargetR,
+          }
+        );
         setTimeout(() => {
           guessInputRef.current?.focus();
         }, 0);

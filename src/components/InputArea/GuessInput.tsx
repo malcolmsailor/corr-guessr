@@ -38,13 +38,17 @@ export const GuessInput = ({
   return (
     <TextField
       onKeyDown={handleKeyDown}
-      label="Guess"
+      label={`Guess the correlation between ${appState.feature1.replace(
+        "-",
+        " "
+      )} and ${appState.feature2.replace("-", " ")}`}
       value={value}
       inputRef={inputRef}
       onChange={(event) => setValue(event.target.value)}
       variant="outlined"
       error={error}
       helperText={error ? "Enter a number between 0 and 1" : ""}
+      sx={{ width: "500px" }}
     />
   );
 };

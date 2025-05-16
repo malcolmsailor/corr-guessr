@@ -32,7 +32,7 @@ const CustomBar = (props: CustomBarProps) => {
     (offsetDataVal - props.offsetDataMin) /
     (props.offsetDataMax - props.offsetDataMin);
   const widthDataVal = props.payload[props.widthDataKey];
-  console.log(props);
+
   const normedWidthDataVal =
     (widthDataVal - props.widthDataMin) /
     (props.widthDataMax - props.widthDataMin);
@@ -51,7 +51,7 @@ const CustomBar = (props: CustomBarProps) => {
 };
 
 export const BarPlot = () => {
-  const { data, settings } = useContext(GuessrContext);
+  const { data, settings, appState } = useContext(GuessrContext);
   const [containerHeight, setContainerHeight] = useState(0);
   const barData = [];
 
@@ -65,7 +65,7 @@ export const BarPlot = () => {
   let xDataKey: barDataKey = "constant";
   let yAxisMin: number = 0;
   let yAxisMax: number = 1;
-  if (settings.feature1 === "bar-height") {
+  if (appState.feature1 === "bar-height") {
     if (settings.barPlotType === "unidirectional") {
       xDataKey = "aPos";
       yAxisMin = 0;
@@ -75,7 +75,7 @@ export const BarPlot = () => {
       yAxisMin = aMin;
       yAxisMax = aMax;
     }
-  } else if (settings.feature2 === "bar-height") {
+  } else if (appState.feature2 === "bar-height") {
     if (settings.barPlotType === "unidirectional") {
       xDataKey = "bPos";
       yAxisMin = 0;
@@ -90,12 +90,12 @@ export const BarPlot = () => {
   let offsetDataKey: barDataKey = "constant";
   let offsetDataMin: number = 1; // so that constant 1 - data min will be 0
   let offsetDataMax: number = 2; // so that data max - data min will be nonzero
-  if (settings.feature1 === "bar-offset") {
+  if (appState.feature1 === "bar-offset") {
     offsetDataKey = "a";
     offsetDataMin = aMin;
     offsetDataMax = aMax;
     yAxisMax = yAxisMax + (yAxisMax - yAxisMin);
-  } else if (settings.feature2 === "bar-offset") {
+  } else if (appState.feature2 === "bar-offset") {
     offsetDataKey = "b";
     offsetDataMin = bMin;
     offsetDataMax = bMax;
@@ -105,11 +105,11 @@ export const BarPlot = () => {
   let widthDataKey: barDataKey = "constant";
   let widthDataMin: number = 0; // so that constant 1 - data min will be 1
   let widthDataMax: number = 1; // so that data max - data min will be 1
-  if (settings.feature1 === "bar-width") {
+  if (appState.feature1 === "bar-width") {
     widthDataKey = "a";
     widthDataMin = aMin;
     widthDataMax = aMax;
-  } else if (settings.feature2 === "bar-width") {
+  } else if (appState.feature2 === "bar-width") {
     widthDataKey = "b";
     widthDataMin = bMin;
     widthDataMax = bMax;
@@ -118,7 +118,7 @@ export const BarPlot = () => {
   let mixColor = (_value: number) => data.color1;
 
   let colorDataKey: barDataKey = "constant";
-  if (settings.feature1 === "color") {
+  if (appState.feature1 === "color") {
     colorDataKey = "a";
     mixColor = (value: number) => {
       return getColor(
@@ -129,7 +129,7 @@ export const BarPlot = () => {
         value
       );
     };
-  } else if (settings.feature2 === "color") {
+  } else if (appState.feature2 === "color") {
     colorDataKey = "b";
     mixColor = (value: number) => {
       return getColor(
@@ -145,12 +145,12 @@ export const BarPlot = () => {
   let mixAlpha = (_value: number) => 1;
 
   let opacityDataKey: barDataKey = "constant";
-  if (settings.feature1 === "opacity") {
+  if (appState.feature1 === "opacity") {
     opacityDataKey = "a";
     mixAlpha = (value: number) => {
       return getAlpha(Math.min(...data.a), Math.max(...data.a), value);
     };
-  } else if (settings.feature2 === "opacity") {
+  } else if (appState.feature2 === "opacity") {
     opacityDataKey = "b";
     mixAlpha = (value: number) => {
       return getAlpha(Math.min(...data.b), Math.max(...data.b), value);

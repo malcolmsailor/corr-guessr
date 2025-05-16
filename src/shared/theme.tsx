@@ -1,17 +1,42 @@
 import { responsiveFontSizes, createTheme } from "@mui/material";
+import {
+  blue,
+  red,
+  green,
+  purple,
+  orange,
+  teal,
+  pink,
+  amber,
+} from "@mui/material/colors";
 
 declare module "@mui/material/styles" {
   interface Theme {
     colorPairs: [string, string][];
+    chartColors: string[];
   }
 
   interface ThemeOptions {
     colorPairs: [string, string][];
+    chartColors: string[];
   }
 }
 
 export const theme = responsiveFontSizes(
-  createTheme({ palette: { mode: "light" }, colorPairs: [] })
+  createTheme({
+    palette: { mode: "light" },
+    colorPairs: [],
+    chartColors: [
+      blue[500],
+      red[500],
+      green[500],
+      purple[500],
+      orange[500],
+      teal[500],
+      pink[500],
+      amber[500],
+    ],
+  })
 );
 
 // secondary.main + error.main has insufficient contrast

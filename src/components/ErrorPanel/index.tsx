@@ -1,78 +1,65 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  Grow,
-  Radio,
-  RadioGroup,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { ErrorPlot } from "./ErrorPlot";
+import { Box, Button, Collapse, Divider, Grid, Tab, Tabs } from "@mui/material";
+import { ErrorGuessScatter } from "./ErrorGuessScatter";
 import { useContext, useState } from "react";
-import { KeyboardArrowDown } from "@mui/icons-material";
-import { KeyboardArrowUp } from "@mui/icons-material";
-import { errorPlotTypes } from "../../shared/types";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { ErrorCorrelationScatter } from "./ErrorCorrelationScatter";
+import { ErrorPanelFooter } from "./ErrorPanelFooter";
 import { GuessrContext } from "../../shared/context";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div hidden={value !== index} id={`vertical-tabpanel-${index}`} {...other}>
+      {value === index && <Box>{children}</Box>}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 export const ErrorPanel = () => {
   const [open, setOpen] = useState(false);
-  const { errorPlotType, setErrorPlotType } = useContext(GuessrContext);
-  const theme = useTheme();
-  const isXsScreen = useMediaQuery(theme.breakpoints.only("xs"));
+  const [tabIndex, setTabIndex] = useState(0);
+  const { featureHistory } = useContext(GuessrContext);
+  const numUniqueFeatures = new Set(featureHistory).size;
+
+  // We need to expand the plot box height to account for the legend when
+  // there are lots of features.
+  const plotBoxHeight = Math.max(180, numUniqueFeatures * 24);
   return (
     <>
       <Divider />
-
-      <Collapse in={open}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "180px",
-            width: "100%",
-            marginBottom: 1,
-            marginTop: 2,
-          }}
-        >
-          <ErrorPlot />
-        </Box>
-      </Collapse>
-      <Grid container>
-        {/* <Box sx={{ display: "flex", justifyContent: "right", width: "100%" }}> */}
-        <Grow in={open}>
-          <Grid
-            size={{ xs: 6, sm: 7, md: 8 }}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            <FormControl>
-              <RadioGroup row>
-                {errorPlotTypes.map((thisErrorPlotType, index) => (
-                  <FormControlLabel
-                    key={`${thisErrorPlotType}-${index}`}
-                    value={thisErrorPlotType}
-                    checked={errorPlotType === thisErrorPlotType}
-                    control={<Radio />}
-                    label={
-                      thisErrorPlotType.charAt(0).toUpperCase() +
-                      thisErrorPlotType.slice(1) +
-                      (isXsScreen ? "" : " error")
-                    }
-                    onChange={(_event, checked) =>
-                      setErrorPlotType(
-                        checked ? thisErrorPlotType : errorPlotType
-                      )
-                    }
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-        </Grow>
+      <Grid
+        container
+        sx={{ borderBottom: open ? 1 : 0, borderColor: "divider" }}
+      >
+        <Grid size={{ xs: 6, sm: 7, md: 8 }}>
+          {open ? (
+            <Box>
+              <Tabs
+                value={tabIndex}
+                onChange={(_event, newValue) => setTabIndex(newValue)}
+                variant="fullWidth"
+                centered
+              >
+                <Tab label="Guess number vs. error" {...a11yProps(0)} />
+                <Tab label="Correlation vs. error" {...a11yProps(1)} />
+              </Tabs>
+            </Box>
+          ) : null}
+        </Grid>
         <Grid
           size={{ xs: 6, sm: 5, md: 4 }}
           sx={{ display: "flex", justifyContent: "right" }}
@@ -82,8 +69,41 @@ export const ErrorPanel = () => {
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </Button>
         </Grid>
-        {/* </Box> */}
       </Grid>
+
+      <Collapse in={open}>
+        <Box
+          sx={{
+            height: `${plotBoxHeight + 60}px`,
+            width: "100%",
+            marginTop: 1,
+            marginBottom: -2,
+          }}
+        >
+          <TabPanel value={tabIndex} index={0}>
+            <Box
+              sx={{
+                height: `${plotBoxHeight}px`,
+                width: "100%",
+              }}
+            >
+              <ErrorGuessScatter />
+            </Box>
+            <ErrorPanelFooter />
+          </TabPanel>
+          <TabPanel value={tabIndex} index={1}>
+            <Box
+              sx={{
+                height: `${plotBoxHeight}px`,
+                width: "100%",
+              }}
+            >
+              <ErrorCorrelationScatter />
+            </Box>
+            <ErrorPanelFooter />
+          </TabPanel>
+        </Box>
+      </Collapse>
     </>
   );
 };

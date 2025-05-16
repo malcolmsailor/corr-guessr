@@ -9,19 +9,22 @@ import {
   FormControl,
   Box,
   Divider,
+  Checkbox,
 } from "@mui/material";
 import SliderWithInput from "../shared/SliderWithInput";
 import { FeatureSelector } from "./FeatureSelector";
 import { distributionTypes, barPlotTypes } from "../../shared/types";
 
 export const SettingsWindow = () => {
-  const { settings, setSettings } = useContext(GuessrContext);
+  const { settings, setSettings, randomizeFeatures, setRandomizeFeatures } =
+    useContext(GuessrContext);
   // const calculateN = (value: number) => {
   //   const output = 2 ** value;
   //   return output;
   // };
+  // const [checked, setChecked] = useState(settings.randomizeFeatures);
   const radioStyling = {
-    marginBottom: -1.5,
+    marginBottom: -1.75,
   };
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, padding: 3 }}>
@@ -38,7 +41,20 @@ export const SettingsWindow = () => {
         inputWidth={42}
       />
       <Divider />
-      <FeatureSelector />
+      <FeatureSelector radioStyling={radioStyling} />
+      <FormControl>
+        <FormControlLabel
+          key="randomizeFeaturesCheckbox"
+          value={randomizeFeatures}
+          control={<Checkbox />}
+          label="Randomize features"
+          checked={randomizeFeatures === true}
+          onChange={(_event, checked) => setRandomizeFeatures(checked)}
+          sx={{
+            marginBottom: -1.5,
+          }}
+        />
+      </FormControl>
       <Divider />
       <FormControl>
         <FormLabel>Distribution</FormLabel>

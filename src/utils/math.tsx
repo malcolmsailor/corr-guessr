@@ -54,3 +54,23 @@ export function runRegression(x: [number, number][]) {
   const regression = linearRegression(x);
   return regression;
 }
+
+export function sample<T>(array: readonly T[], n: number): T[] {
+  const copy: T[] = [...array];
+  const result: T[] = [];
+  for (let i = 0; i < n; i++) {
+    const j = i + Math.floor(Math.random() * (copy.length - i));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+    result.push(copy[i]);
+  }
+  return result;
+}
+
+export const formatNumber = (num: number): string => {
+  // Check if the number is an integer
+  if (Number.isInteger(num)) {
+    return num.toString();
+  }
+  // Otherwise format with at most 2 decimal places
+  return num.toFixed(2).replace(/\.?0+$/, "");
+};

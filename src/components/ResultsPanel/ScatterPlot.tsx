@@ -19,7 +19,7 @@ type ScatterPlotProps = {
 export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
   // We need to delay the data to avoid the user catching a glimpse of the new scatter
   // plot before it is hidden.
-  const { data, settings } = useContext(GuessrContext);
+  const { data, appState } = useContext(GuessrContext);
 
   const [delayData, setDelayData] = useState(data);
 
@@ -38,8 +38,8 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
       z: 0,
     });
   }
-  const xLabel = FEATURE_MAPPING[settings.feature1];
-  const yLabel = FEATURE_MAPPING[settings.feature2];
+  const xLabel = FEATURE_MAPPING[appState.feature1];
+  const yLabel = FEATURE_MAPPING[appState.feature2];
 
   let xMin = Math.min(...delayData.a);
   let xMax = Math.max(...delayData.a);
@@ -54,7 +54,7 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
 
   let mixColor = (_entry: any) => delayData.color1;
 
-  if (settings.feature1 === "color") {
+  if (appState.feature1 === "color") {
     mixColor = (entry: any) => {
       return getColor(
         Math.min(...delayData.a),
@@ -64,7 +64,7 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
         entry.x
       );
     };
-  } else if (settings.feature2 === "color") {
+  } else if (appState.feature2 === "color") {
     mixColor = (entry: any) => {
       return getColor(
         Math.min(...delayData.b),
@@ -78,7 +78,7 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
 
   let mixAlpha = (_entry: any) => 1;
 
-  if (settings.feature1 === "opacity") {
+  if (appState.feature1 === "opacity") {
     mixAlpha = (entry: any) => {
       return getAlpha(
         Math.min(...delayData.a),
@@ -86,7 +86,7 @@ export const ScatterPlot = ({ delayMS = 100 }: ScatterPlotProps) => {
         entry.x
       );
     };
-  } else if (settings.feature2 === "opacity") {
+  } else if (appState.feature2 === "opacity") {
     mixAlpha = (entry: any) => {
       return getAlpha(
         Math.min(...delayData.b),

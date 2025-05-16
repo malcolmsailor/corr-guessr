@@ -10,7 +10,11 @@ import {
 import { features, type Feature } from "../../shared/types";
 import { FEATURE_MAPPING } from "../../shared/defaults";
 
-export function FeatureSelector() {
+interface FeatureSelectorProps {
+  radioStyling: React.CSSProperties;
+}
+
+export function FeatureSelector({ radioStyling }: FeatureSelectorProps) {
   const { settings, setSettings } = useContext(GuessrContext);
   const selectedFeatures = [settings.feature1, settings.feature2];
 
@@ -37,7 +41,7 @@ export function FeatureSelector() {
             label={FEATURE_MAPPING[feature]}
             checked={selectedFeatures.includes(feature)}
             onChange={(_event, checked) => handleChange(feature, checked)}
-            sx={{ marginBottom: -1.5 }}
+            sx={radioStyling}
           />
         ))}
       </RadioGroup>

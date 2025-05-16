@@ -42,7 +42,11 @@ export interface AppState {
   targetR: number;
   guess: number;
   guessActive: boolean;
-  errors: number[];
+  // When features are randomized, if we modify SettingsState, we get into an infinite
+  // loop. Thus we store the features in appstate and actually use these ones for
+  // making the plot.
+  feature1: Feature;
+  feature2: Feature;
 }
 
 export interface GuessrContextType {
@@ -56,4 +60,12 @@ export interface GuessrContextType {
   setSettingsOpen: (settingsOpen: boolean) => void;
   errorPlotType: ErrorPlotType;
   setErrorPlotType: (errorPlotType: ErrorPlotType) => void;
+  errors: number[];
+  setErrors: (errors: number[]) => void;
+  corrs: number[];
+  setCorrs: (corrs: number[]) => void;
+  featureHistory: string[];
+  setFeatureHistory: (featureHistory: string[]) => void;
+  randomizeFeatures: boolean;
+  setRandomizeFeatures: (randomizeFeatures: boolean) => void;
 }

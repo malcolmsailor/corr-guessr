@@ -2,7 +2,7 @@ import { GuessrContext } from "../shared/context";
 
 import { useContext, useRef, useState } from "react";
 
-import { getData } from "../game-logic";
+import { updateData } from "../game-logic";
 
 import { useEffect } from "react";
 import { BarPlot } from "./BarPlot";
@@ -23,7 +23,6 @@ import { ResultsPanel } from "./ResultsPanel";
 import { ErrorPanel } from "./ErrorPanel";
 
 export const CorrGuessr = () => {
-  // On page load, update the data
   const {
     settings,
     appState,
@@ -31,12 +30,10 @@ export const CorrGuessr = () => {
     settingsOpen,
     setSettingsOpen,
     setAppState,
+    randomizeFeatures,
   } = useContext(GuessrContext);
-  const theme = useTheme();
-  const updateData = (): void => {
-    setData(getData(settings, appState.targetR, theme.colorPairs));
-  };
 
+  const theme = useTheme();
   for (let i = 0; i < 20; i++) {
     const r = getCorrelation();
     getCorrelatedVectors(r, settings.n, settings.distribution);
@@ -48,12 +45,18 @@ export const CorrGuessr = () => {
   const mainPanelHeight = "400px";
 
   useEffect(() => {
-    updateData();
+    updateData(
+      settings,
+      appState,
+      setAppState,
+      setData,
+      theme,
+      randomizeFeatures,
+      {
+        guessActive: true,
+      }
+    );
     setShowResultsPanel(false);
-    setAppState({
-      ...appState,
-      guessActive: true,
-    });
   }, [settings]);
 
   const containerRef = useRef<HTMLDivElement>(null);
