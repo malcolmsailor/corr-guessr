@@ -11,10 +11,14 @@ import { features, type Feature } from "../../shared/types";
 import { FEATURE_MAPPING } from "../../shared/defaults";
 
 interface FeatureSelectorProps {
+  greyedOut: boolean;
   radioStyling: React.CSSProperties;
 }
 
-export function FeatureSelector({ radioStyling }: FeatureSelectorProps) {
+export function FeatureSelector({
+  greyedOut,
+  radioStyling,
+}: FeatureSelectorProps) {
   const { settings, setSettings } = useContext(GuessrContext);
   const selectedFeatures = [settings.feature1, settings.feature2];
 
@@ -37,7 +41,7 @@ export function FeatureSelector({ radioStyling }: FeatureSelectorProps) {
         {features.map((feature, index) => (
           <FormControlLabel
             key={`${feature}-${index}`}
-            control={<Radio />}
+            control={<Radio disabled={greyedOut} />}
             label={FEATURE_MAPPING[feature]}
             checked={selectedFeatures.includes(feature)}
             onChange={(_event, checked) => handleChange(feature, checked)}

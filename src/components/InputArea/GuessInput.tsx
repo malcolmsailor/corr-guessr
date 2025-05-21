@@ -15,6 +15,8 @@ export const GuessInput = ({
   guessInputRef: React.RefObject<HTMLInputElement | null>;
   nextButtonRef: React.RefObject<HTMLButtonElement | null>;
 }) => {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   const { appState, setAppState } = useContext(GuessrContext);
   const [error, setError] = useState(false);
   const [value, setValue] = useState("0.");
@@ -46,13 +48,17 @@ export const GuessInput = ({
     }
   };
 
+  const labelFeature1 = appState.feature1.replace("-", " ");
+  const labelFeature2 = appState.feature2.replace("-", " ");
+  let labelText = `Guess the correlation between ${labelFeature1} and ${labelFeature2}`;
+  if (isXs) {
+    labelText = `Correlation of ${labelFeature1} and ${labelFeature2}?`;
+  }
+
   const textField = (
     <TextField
       onKeyDown={handleKeyDown}
-      label={`Guess the correlation between ${appState.feature1.replace(
-        "-",
-        " "
-      )} and ${appState.feature2.replace("-", " ")}`}
+      label={labelText}
       value={value}
       inputRef={inputRef}
       onChange={(event) => setValue(event.target.value)}
@@ -60,12 +66,12 @@ export const GuessInput = ({
       error={error}
       helperText={error ? "Enter a number between 0 and 1" : ""}
       fullWidth
-      slotProps={{ htmlInput: { inputMode: "decimal" } }}
+      slotProps={{
+        htmlInput: { inputMode: "decimal" },
+      }}
     />
   );
 
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   if (!isXs) {
     return textField;
   }

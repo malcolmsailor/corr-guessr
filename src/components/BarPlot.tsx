@@ -65,8 +65,10 @@ export const BarPlot = () => {
   let xDataKey: barDataKey = "constant";
   let yAxisMin: number = 0;
   let yAxisMax: number = 1;
+  const hasBarOffset =
+    appState.feature1 === "bar-offset" || appState.feature2 === "bar-offset";
   if (appState.feature1 === "bar-height") {
-    if (settings.barPlotType === "unidirectional") {
+    if (settings.barPlotType === "unidirectional" || hasBarOffset) {
       xDataKey = "aPos";
       yAxisMin = 0;
       yAxisMax = aMax - aMin;
@@ -76,7 +78,7 @@ export const BarPlot = () => {
       yAxisMax = aMax;
     }
   } else if (appState.feature2 === "bar-height") {
-    if (settings.barPlotType === "unidirectional") {
+    if (settings.barPlotType === "unidirectional" || hasBarOffset) {
       xDataKey = "bPos";
       yAxisMin = 0;
       yAxisMax = bMax - bMin;

@@ -62,7 +62,11 @@ export const CorrGuessr = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Container maxWidth="md" ref={containerRef} sx={{ position: "relative" }}>
+    <Container
+      maxWidth="md"
+      ref={containerRef}
+      sx={{ position: "relative", marginTop: { xs: 1, sm: 2 } }}
+    >
       <Card sx={{ marginBottom: 5 }}>
         <CardContent sx={{ marginBottom: -2, marginTop: -1 }}>
           <Grid container>

@@ -41,7 +41,10 @@ export const SettingsWindow = () => {
         inputWidth={42}
       />
       <Divider />
-      <FeatureSelector radioStyling={radioStyling} />
+      <FeatureSelector
+        greyedOut={randomizeFeatures}
+        radioStyling={radioStyling}
+      />
       <FormControl>
         <FormControlLabel
           key="randomizeFeaturesCheckbox"
@@ -88,7 +91,14 @@ export const SettingsWindow = () => {
               key={`${barPlotType}-${index}`}
               value={barPlotType}
               checked={settings.barPlotType === barPlotType}
-              control={<Radio />}
+              control={
+                <Radio
+                  disabled={
+                    settings.feature1 === "bar-offset" ||
+                    settings.feature2 === "bar-offset"
+                  }
+                />
+              }
               label={barPlotType.charAt(0).toUpperCase() + barPlotType.slice(1)}
               onChange={(_event, checked) =>
                 setSettings({

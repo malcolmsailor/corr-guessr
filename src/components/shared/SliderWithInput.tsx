@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
 import { useId } from "react";
-import NonLinearSlider from "../SettingsWindow/NonLinearSlider";
 
 interface SliderWithInputProps {
   value: number;
@@ -14,7 +13,6 @@ interface SliderWithInputProps {
   min: number;
   max: number;
   label: string;
-  calculateValue?: (value: number) => number;
   step?: number;
   inputWidth: number;
 }
@@ -26,47 +24,35 @@ export default function SliderWithInput({
   min,
   max,
   step,
-  calculateValue = undefined,
   inputWidth = 42,
 }: SliderWithInputProps) {
   const handleSliderChange = (
     _event: Event,
     newValue: number | number[],
     _activeThumb: number
-  ) => {
-    if (calculateValue) {
-      setValue(calculateValue(newValue as number));
-    } else {
-      setValue(newValue as number);
-    }
-  };
+  ) => setValue(newValue as number);
+
   const Input = styled(MuiInput)`
     width: ${inputWidth}px;
   `;
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (calculateValue) {
-      setValue(calculateValue(Number(event.target.value)));
-    } else {
-      setValue(event.target.value === "" ? 0 : Number(event.target.value));
-    }
+    setValue(event.target.value === "" ? 0 : Number(event.target.value));
   };
+
   const id = `${label}-input-slider-${useId()}`;
-  const sliderProps = {
-    value: typeof value === "number" ? value : 0,
-    onChange: handleSliderChange,
-    min,
-    max,
-    step,
-    "aria-labelledby": id,
-  };
-  let slider;
-  if (calculateValue) {
-    slider = (
-      <NonLinearSlider calculateValue={calculateValue} {...sliderProps} />
-    );
-  } else {
-    slider = <Slider {...sliderProps} />;
-  }
+  const slider = (
+    <Slider
+      value={typeof value === "number" ? value : 0}
+      onChange={handleSliderChange}
+      min={min}
+      max={max}
+      step={step}
+      valueLabelDisplay="auto"
+      aria-labelledby={id}
+    />
+  );
+
   return (
     <>
       <Typography id={id} sx={{ marginBottom: -1 }}>

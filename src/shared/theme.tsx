@@ -1,13 +1,24 @@
 import { responsiveFontSizes, createTheme } from "@mui/material";
 import {
-  blue,
   red,
-  green,
-  purple,
-  orange,
-  teal,
   pink,
+  purple,
+  deepPurple,
+  indigo,
+  blue,
+  lightBlue,
+  cyan,
+  teal,
+  green,
+  lightGreen,
+  lime,
+  yellow,
   amber,
+  orange,
+  deepOrange,
+  brown,
+  grey,
+  blueGrey,
 } from "@mui/material/colors";
 
 declare module "@mui/material/styles" {
@@ -103,6 +114,20 @@ export const theme = responsiveFontSizes(
           root: {
             [breakpoints.down("sm")]: {
               fontSize: "0.75rem",
+              textOverflow: "initial",
+              whiteSpace: "initial",
+            },
+          },
+        },
+      },
+      // MuiOutlinedInput needs to have the same font size as MuiInputLabel for
+      // the line around the text input area to have the right size of notch for
+      // the label text
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            [breakpoints.down("sm")]: {
+              fontSize: "0.75rem",
             },
           },
         },
@@ -119,21 +144,20 @@ export const theme = responsiveFontSizes(
       teal[500],
       pink[500],
       amber[500],
+      deepPurple[500],
+      lightBlue[500],
+      lightGreen[500],
+      deepOrange[500],
+      grey[500],
+      indigo[500],
+      lime[500],
+      brown[500],
+      cyan[500],
+      yellow[500],
+      blueGrey[500],
     ],
   })
 );
-
-// secondary.main + error.main has insufficient contrast
-// theme.colorPairs.push([theme.palette.secondary.main, theme.palette.error.main]);
-
-// success.main + secondary.main is ugly
-// theme.colorPairs.push([
-//   theme.palette.success.main,
-//   theme.palette.secondary.main,
-// ]);
-
-// Insufficient contrast
-// theme.colorPairs.push([theme.palette.warning.main, theme.palette.error.main]);
 
 theme.colorPairs.push([theme.palette.error.main, theme.palette.primary.main]);
 theme.colorPairs.push([
