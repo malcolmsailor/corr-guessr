@@ -1,6 +1,5 @@
 import {
   Divider,
-  IconButton,
   Tooltip,
   Link,
   Typography,
@@ -9,14 +8,14 @@ import {
 } from "@mui/material";
 
 import { Grid } from "@mui/material";
-import { Settings } from "@mui/icons-material";
-import { GuessrContext } from "../shared/context";
-import { useContext } from "react";
 
 import githubMark from "../assets/github-mark.svg";
 
-export const Header = () => {
-  const { settingsOpen, setSettingsOpen } = useContext(GuessrContext);
+export const Header = ({
+  leftComponent,
+}: {
+  leftComponent: React.ReactNode;
+}) => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
 
@@ -32,19 +31,7 @@ export const Header = () => {
             justifyContent: "flex-end",
           }}
         >
-          <Tooltip title="Settings">
-            <IconButton
-              onClick={() => setSettingsOpen(!settingsOpen)}
-              sx={{ padding: 0.5 }}
-            >
-              <Settings
-                sx={{
-                  fontSize: isXs ? 20 : 30,
-                  color: theme.palette.text.primary,
-                }}
-              />
-            </IconButton>
-          </Tooltip>
+          {leftComponent}
         </Grid>
         <Grid size={10} sx={{ textAlign: "center", paddingY: 2 }}>
           <Typography variant="h3">Correlation Guessr</Typography>

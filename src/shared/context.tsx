@@ -14,30 +14,11 @@ import {
 import { getCorrelation, sample } from "../utils/math";
 import type { AppState, ErrorPlotType, Feature } from "./types";
 import { useTheme } from "@mui/material";
+import { useLocalStorage } from "../utils/storage";
 
 export const GuessrContext = createContext<GuessrContextType>(
   {} as GuessrContextType
 );
-
-function useLocalStorage<T>(
-  key: string,
-  defaultValue: T
-): [T, (value: T) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const storedValue = localStorage.getItem(key);
-      return storedValue ? JSON.parse(storedValue) : defaultValue;
-    } catch (error) {
-      console.error(error);
-      return defaultValue;
-    }
-  });
-  const setValue = (value: T) => {
-    setStoredValue(value);
-    localStorage.setItem(key, JSON.stringify(value));
-  };
-  return [storedValue, setValue];
-}
 
 export function GuessrContextProvider({
   children,
@@ -45,6 +26,11 @@ export function GuessrContextProvider({
   children: React.ReactNode;
 }) {
   const initialFeatures = sample(features, 2) as [Feature, Feature];
+
+  // TODO: (Malcolm 2025-06-10) why does feature1 and feature2 need to be in settings
+  //   AND in appState?
+  // I think it's because the features in app state are ordinarily derived from settings
+  // but when they are randomized, they need to be generated separately and stored there.
   const [settings, setSettings] = useState<SettingsState>({
     n: DEFAULT_N,
     distribution: DEFAULT_DISTRIBUTION,

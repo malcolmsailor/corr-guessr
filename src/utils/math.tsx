@@ -2,6 +2,7 @@ import normal from "@stdlib/random-base-normal";
 import uniform from "@stdlib/random-base-uniform";
 import incrpcorr from "@stdlib/stats-incr-pcorr";
 import { linearRegression } from "simple-statistics";
+import type { GameLevelParams } from "../shared/types";
 
 export function getCorrelatedVectors(
   r: number,
@@ -36,6 +37,18 @@ export function getCorrelatedVectors(
 
 export function getCorrelation(): number {
   return uniform(0, 1);
+}
+
+export function getGameCorrelation(
+  levelParams: GameLevelParams
+): [number, "low" | "high"] {
+  const { lowLowerBound, lowUpperBound, highLowerBound, highUpperBound } =
+    levelParams;
+  if (uniform(0, 1) > 0.5) {
+    return [uniform(lowLowerBound, lowUpperBound), "low"];
+  } else {
+    return [uniform(highLowerBound, highUpperBound), "high"];
+  }
 }
 
 export function calculateCorrelation(a: number[], b: number[]): number {

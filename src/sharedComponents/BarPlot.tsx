@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { Bar, BarChart, Cell, YAxis, type BarProps } from "recharts";
-import { GuessrContext } from "../shared/context";
 import { ResponsiveContainer } from "recharts";
 
 import { getAlpha, getColor } from "../shared/colors";
 import { alpha } from "@mui/material/styles";
+import type { GuessrContextType, GuessrGameContextType } from "../shared/types";
 
 const getPath = (
   x: number,
@@ -50,8 +50,12 @@ const CustomBar = (props: CustomBarProps) => {
   );
 };
 
-export const BarPlot = () => {
-  const { data, settings, appState } = useContext(GuessrContext);
+export const BarPlot = <T extends GuessrGameContextType | GuessrContextType>({
+  context,
+}: {
+  context: React.Context<T>;
+}) => {
+  const { data, settings, appState } = useContext(context);
   const [containerHeight, setContainerHeight] = useState(0);
   const barData = [];
 
@@ -62,13 +66,16 @@ export const BarPlot = () => {
 
   type barDataKey = "constant" | "a" | "b" | "aPos" | "bPos";
 
+  const plotType =
+    "barPlotType" in appState ? appState.barPlotType : settings.barPlotType;
+
   let xDataKey: barDataKey = "constant";
   let yAxisMin: number = 0;
   let yAxisMax: number = 1;
   const hasBarOffset =
     appState.feature1 === "bar-offset" || appState.feature2 === "bar-offset";
   if (appState.feature1 === "bar-height") {
-    if (settings.barPlotType === "unidirectional" || hasBarOffset) {
+    if (plotType === "unidirectional" || hasBarOffset) {
       xDataKey = "aPos";
       yAxisMin = 0;
       yAxisMax = aMax - aMin;
@@ -78,7 +85,7 @@ export const BarPlot = () => {
       yAxisMax = aMax;
     }
   } else if (appState.feature2 === "bar-height") {
-    if (settings.barPlotType === "unidirectional" || hasBarOffset) {
+    if (plotType === "unidirectional" || hasBarOffset) {
       xDataKey = "bPos";
       yAxisMin = 0;
       yAxisMax = bMax - bMin;

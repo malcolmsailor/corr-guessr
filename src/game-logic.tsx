@@ -2,7 +2,9 @@ import { getRandomColorPair } from "./shared/colors";
 import {
   features,
   type AppState,
+  type Correctness,
   type DataState,
+  type GameState,
   type SettingsState,
 } from "./shared/types";
 import {
@@ -11,6 +13,12 @@ import {
   sample,
 } from "./utils/math";
 import type { Theme } from "@mui/material";
+import { getGameCorrelation } from "./utils/math";
+import {
+  DEFAULT_LEVEL_INCREMENT,
+  DEFAULT_SCORE_INCREMENT,
+  GAME_LEVELS,
+} from "./shared/defaults";
 
 export const getData = (
   settings: SettingsState,
@@ -54,4 +62,55 @@ export const updateData = (
     });
   }
   setData(getData(settings, appState.targetR, theme.colorPairs));
+};
+
+export const newTurn = (
+  correct: Correctness,
+  appState: GameState,
+  settings: SettingsState,
+  theme: Theme,
+  setData: (data: DataState) => void,
+  setAppState: (appState: GameState) => void
+) => {
+  const newScore =
+    correct === "correct"
+      ? appState.score + DEFAULT_SCORE_INCREMENT
+      : Math.max(0, appState.score - DEFAULT_SCORE_INCREMENT);
+  const newLevel = scoreToLevel(
+    appState.level,
+    newScore,
+    DEFAULT_LEVEL_INCREMENT
+  );
+  const victory = newLevel >= GAME_LEVELS.length;
+  if (victory) {
+    setAppState({
+      ...appState,
+      victory,
+    });
+    return;
+  }
+  const [targetR, RLabel] = getGameCorrelation(GAME_LEVELS[newLevel]);
+  setData(getData(settings, targetR, theme.colorPairs));
+  setAppState({
+    ...appState,
+    targetR,
+    RLabel,
+    correct,
+    score: newScore,
+    level: newLevel,
+    levelParams: GAME_LEVELS[newLevel],
+    feature1: GAME_LEVELS[newLevel].feature1,
+    feature2: GAME_LEVELS[newLevel].feature2,
+    barPlotType: GAME_LEVELS[newLevel].barPlotType || settings.barPlotType,
+    timeRemaining: GAME_LEVELS[newLevel].timePerTurnInSeconds,
+  });
+};
+
+export const scoreToLevel = (
+  currentLevel: number,
+  score: number,
+  levelIncrement: number
+) => {
+  const level = Math.max(currentLevel, Math.floor(score / levelIncrement));
+  return level;
 };

@@ -69,3 +69,45 @@ export interface GuessrContextType {
   randomizeFeatures: boolean;
   setRandomizeFeatures: (randomizeFeatures: boolean) => void;
 }
+
+export type GameLevelParams = {
+  lowLowerBound: number;
+  lowUpperBound: number;
+  highLowerBound: number;
+  highUpperBound: number;
+  feature1: Feature;
+  feature2: Feature;
+  timePerTurnInSeconds: number;
+  barPlotType?: BarPlotType;
+};
+
+export type Correctness = "na" | "correct" | "incorrect";
+
+export type CorrelationType = "low" | "high";
+
+export type UserAnswer = "low" | "high" | "timeout" | "na";
+export interface GameState extends AppState {
+  RLabel: CorrelationType;
+  userAnswer: UserAnswer;
+  level: number;
+  score: number;
+  welcome: boolean;
+  victory: boolean;
+  levelParams: GameLevelParams;
+  correct: Correctness;
+  questionID: number;
+  progressBarIncrementInSeconds: number;
+  gameID: number;
+  paused: boolean;
+  timeRemaining: number;
+  barPlotType: BarPlotType;
+}
+
+export interface GuessrGameContextType {
+  appState: GameState;
+  setAppState: (appState: GameState) => void;
+  data: DataState;
+  setData: (data: DataState) => void;
+  settings: SettingsState;
+  setSettings: (settings: SettingsState) => void;
+}
